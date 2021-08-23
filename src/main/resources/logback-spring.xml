@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false">
+
+  <!--定义日志文件的存储地址 -->
+  <springProperty scope="context" name="logPath" source="log.path" defaultValue="logdir"/>
+  <property name="LOG_HOME" value="${logPath}" />
+  <property name="project.name" value="cmpp-to-http" />
+
+  <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+  <property name="out.pattern"
+            value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n"/>
+
+  <!-- 控制台输出 -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+      <pattern>${out.pattern}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="chanSubmitAppender"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${LOG_HOME}/chan_submit.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/chan_submit.log.%d.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{${yyyy-MM-dd HH:mm:ss.SSS}} %p %logger{0} %m%n</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <appender name="chanReportAppender"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${LOG_HOME}/chan_report.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/chan_report.log.%d.log</fileNamePattern>
+      <MaxHistory>7</MaxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{${yyyy-MM-dd HH:mm:ss.SSS}} %p %logger{0} %m%n</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <appender name="midAppender"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${LOG_HOME}/mid_consume.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/mid_consume.log.%d.log</fileNamePattern>
+      <!--日志文件保留天数-->
+      <MaxHistory>7</MaxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{${yyyy-MM-dd HH:mm:ss.SSS}} %p %logger{0} %m%n</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <appender name="chanUpStreamAppender"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${LOG_HOME}/chan_up.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/chan_up.log.%d.log</fileNamePattern>
+      <!-- 每产生一个日志文件，该日志文件的保存期限为10天 -->
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{${yyyy-MM-dd HH:mm:ss.SSS}} %p %logger{0} %m%n</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <!-- 按照每天和固定大小(5MB)生成日志文件【最新的日志，是没有日期没有数字的】 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${project.name}.log</file>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>DEBUG</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${project.name}_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <!--日志文件保留天数-->
+      <MaxHistory>7</MaxHistory>
+      <!--日志文件最大的大小-->
+      <MaxFileSize>1024mb</MaxFileSize>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${out.pattern}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${project.name}-error.log</file>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${project.name}-error-%d{yyyy-MM-dd}.log</fileNamePattern>
+      <MaxHistory>7</MaxHistory>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${out.pattern}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+
+  <!--mybatis log configure-->
+  <logger name="com.apache.ibatis" level="WARN"/>
+  <logger name="java.sql.Connection" level="WARN"/>
+  <logger name="java.sql.Statement" level="WARN"/>
+  <logger name="java.sql.PreparedStatement" level="WARN"/>
+
+  <!--  短信提交记录-->
+  <logger name="chan.submit" level="INFO" additivity="false">
+    <appender-ref ref="chanSubmitAppender" />
+  </logger>
+
+  <!--  短信状态报告-->
+  <logger name="chan.report" level="INFO" additivity="false">
+    <appender-ref ref="chanReportAppender" />
+  </logger>
+
+  <!--  短信上行报告-->
+  <logger name="chan.upstream" level="INFO" additivity="false">
+    <appender-ref ref="chanUpStreamAppender" />
+  </logger>
+
+  <!--  短信id消费日志 -->
+  <logger name="mid" level="INFO" additivity="false">
+    <appender-ref ref="midAppender" />
+  </logger>
+
+  <!-- 日志输出级别 -->
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="FILE" />
+    <appender-ref ref="ERROR" />
+  </root>
+</configuration>
