@@ -10,7 +10,7 @@ Spring Boot + Mysql + Redis + Netty 4.x + Hutool 5.x + Mybatis-plus 3.x + Guava 
 1. 前提：本地安装了mysql 5.x和redis
 2. 数据库初始化：执行resource/sql下的sms.sql文件创建数据库和表
 3. 账号密码修改：修改application.yml中Mysql和Redis的验证信息
-4. 初始化通道：在sms_channel表中添加一条通道，主要字段说明如下：
+4. 初始化通道：在sms_channel表中添加通道，主要字段说明如下：
 + channel_ip: 通道方提供的通道ip地址
 + port: 通道方提供的通道端口号（cmpp默认为7890，通道方也可能换成其他端口号）
 + login_name: 通道登录用户名
