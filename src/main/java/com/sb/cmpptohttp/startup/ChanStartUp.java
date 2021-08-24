@@ -185,9 +185,7 @@ public class ChanStartUp {
         child.setLoginPassowrd(password);
 
         List<BusinessHandlerInterface> serverHandlers = new ArrayList<BusinessHandlerInterface>();
-//        serverHandlers.add(new Sgip2CMPPBusinessHandler());
 
-        // 复用CMPP的Handler
         serverHandlers.add(new SGIPSessionConnectedHandler());
         child.setBusinessHandlerSet(serverHandlers);
         return child;
@@ -229,9 +227,6 @@ public class ChanStartUp {
         // 默认不重发消息
         client.setReSendFailMsg(false);
         client.setSupportLongmsg(EndpointEntity.SupportLongMessage.BOTH);
-//        client.setCloseWhenRetryFailed(false);
-
-//        CMPPSessionConnectedHandler cmppSessionConnectedHandler = new CMPPSessionConnectedHandler();
 
         List<BusinessHandlerInterface> clienthandlers = new ArrayList<BusinessHandlerInterface>();
         clienthandlers.add(cmppSessionConnectedHandler);
@@ -265,7 +260,6 @@ public class ChanStartUp {
         // 设置限速
         client.setWriteLimit(channel.getSpeed());
 
-//        SMGPSessionConnectedHandler smgpSessionConnectedHandler = new SMGPSessionConnectedHandler();
         List<BusinessHandlerInterface> clienthandlers = new ArrayList<BusinessHandlerInterface>();
 
         clienthandlers.add(smgpSessionConnectedHandler);
@@ -352,7 +346,7 @@ public class ChanStartUp {
         SgipServerEndpointEntity server = new SgipServerEndpointEntity();
         server.setId(ProtocolTypeEnum.SGIP.name);
         server.setHost("0.0.0.0");
-        server.setPort(8706);
+        server.setPort(8806);
         server.setValid(true);
         server.setIdleTimeSec((short) 60);
         //使用ssl加密数据流
