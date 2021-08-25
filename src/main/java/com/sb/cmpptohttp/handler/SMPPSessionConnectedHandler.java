@@ -1,6 +1,7 @@
 package com.sb.cmpptohttp.handler;
 
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONUtil;
 import com.sb.cmpptohttp.domain.RedisKey;
@@ -8,6 +9,7 @@ import com.sb.cmpptohttp.domain.dto.ChannelReportMessage;
 import com.sb.cmpptohttp.domain.dto.ChannelSubmitLog;
 import com.sb.cmpptohttp.domain.dto.MessageDTO;
 import com.sb.cmpptohttp.domain.enums.SmsStatusEnum;
+import com.sb.cmpptohttp.service.SendMsgService;
 import com.zx.sms.codec.smpp.msg.DeliverSm;
 import com.zx.sms.codec.smpp.msg.DeliverSmReceipt;
 import com.zx.sms.codec.smpp.msg.DeliverSmResp;
@@ -34,6 +36,9 @@ import java.time.Duration;
 @ChannelHandler.Sharable
 @Component
 public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
+
+    @Autowired
+    private SendMsgService sendMsgService;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -126,6 +131,11 @@ public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
 
             reportLogger.info(JSONUtil.toJsonStr(channelReportMessage));
 
+            /**
+             * 更新短信记录状态
+             */
+            updateSmsStatus(channelReportMessage);
+
 
         } else if (msg instanceof DeliverSm) {
             DeliverSm e = (DeliverSm) msg;
@@ -134,6 +144,23 @@ public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
         } else {
             ctx.fireChannelRead(msg);
         }
+    }
+
+    /**
+     * 收到状态报告，更新短信记录状态
+     */
+    private void updateSmsStatus(ChannelReportMessage channelReportMessage) {
+        String msgId = channelReportMessage.getMsgId();
+
+        Object msgObject =
+                redisTemplate.opsForValue().get(RedisKey.MSGID_MID_KEY_PREFIX + msgId);
+        if (msgObject == null) {
+            log.error("cannot find sid, msgid:{}", msgId);
+            return;
+        }
+
+        Long mid = Convert.toLong(msgObject.toString());
+        sendMsgService.updateMsgStatus(mid, channelReportMessage.getStatus(), channelReportMessage.getStatusCode());
     }
 
 }
