@@ -155,7 +155,7 @@ public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
         Object msgObject =
                 redisTemplate.opsForValue().get(RedisKey.MSGID_MID_KEY_PREFIX + msgId);
         if (msgObject == null) {
-            log.error("cannot find sid, msgid:{}", msgId);
+            log.error("cannot find mid, msgid:{}", msgId);
             return;
         }
 
