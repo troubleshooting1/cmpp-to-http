@@ -26,4 +26,4 @@ Spring Boot + Mysql + Redis + Netty 4.x + Hutool 5.x + Mybatis-plus 3.x + Guava 
 
 ## 交流
 欢迎各位Star！！！qq群号765161317
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0901/150153_e191c1e6_1951833.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0901/150230_5ee1a1c4_1951833.png "屏幕截图.png")
