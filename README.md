@@ -25,5 +25,5 @@ Spring Boot + Mysql + Redis + Netty 4.x + Hutool 5.x + Mybatis-plus 3.x + Guava 
 项目是在 [SMSGate](https://github.com/Lihuanghe/SMSGate) 基础上开发的，感谢黄河大佬提供这么好的开源项目
 
 ## 交流
-欢迎各位 **Star** ！！！有更多短信技术问题，欢迎进群交流，qq群号765161317  
+欢迎各位 **Star ！！！** 有更多短信技术问题，欢迎进群交流，qq群号765161317  
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0901/150230_5ee1a1c4_1951833.png "屏幕截图.png")
