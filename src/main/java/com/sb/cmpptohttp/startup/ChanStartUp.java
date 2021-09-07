@@ -211,6 +211,7 @@ public class ChanStartUp {
         client.setMsgSrc(channel.getMsgSrc());
         // 最大连接数
         client.setMaxChannels(Convert.toShort(channel.getMaxConnect()));
+        client.setCloseWhenRetryFailed(false);
 
         // CMPP协议版本，默认为3.0协议
         if (channel.getProtocol().equals(ProtocolTypeEnum.CMPP30.code)) {
@@ -256,6 +257,7 @@ public class ChanStartUp {
         client.setUseSSL(false);
         client.setReSendFailMsg(false);
         client.setClientVersion((byte) 0x13);
+        client.setCloseWhenRetryFailed(false);
 
         // 设置限速
         client.setWriteLimit(channel.getSpeed());
@@ -289,6 +291,7 @@ public class ChanStartUp {
         client.setUseSSL(false);
         client.setReSendFailMsg(false);
         client.setWriteLimit(channel.getSpeed());
+        client.setCloseWhenRetryFailed(false);
 
         // 接收长短信时不自动合并
         client.setSupportLongmsg(EndpointEntity.SupportLongMessage.SEND);
@@ -320,6 +323,7 @@ public class ChanStartUp {
         client.setUseSSL(false);
         client.setReSendFailMsg(false);
         client.setIdleTimeSec((short) 120);
+        client.setCloseWhenRetryFailed(false);
         client.setWriteLimit(channel.getSpeed());
         List<BusinessHandlerInterface> clienthandlers = new ArrayList<BusinessHandlerInterface>();
 //        clienthandlers.add(new SgipReportRequestMessageHandler());
