@@ -22,7 +22,7 @@ Spring Boot + Mysql + Redis + Netty 4.x + Hutool 5.x + Mybatis-plus 3.x + Guava 
 5. 启动项目，调用SmsController下/sms/sendMsg接口发送短信
 
 ## 感谢
-项目是在 [SMSGate](https://github.com/Lihuanghe/SMSGate) 基础上开发的，感谢黄河大佬提供这么好的开源项目
+项目是在 [SMSGate](https://github.com/Lihuanghe/SMSGate) 基础上开发的，感谢黄河大佬提供的开源项目
 
 ## 交流
 欢迎各位  **Star**  ⭐️⭐️⭐️ 有更多短信技术问题或者短信合作，欢迎进群交流，qq群号765161317  
