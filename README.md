@@ -21,6 +21,14 @@ Spring Boot + Mysql + Redis + Netty 4.x + Hutool 5.x + Mybatis-plus 3.x + Guava 
 + max_connect: 当前通道最大连接数
 5. 启动项目，调用SmsController下/sms/sendMsg接口发送短信
 
+## 补充
+楼主最近正在开发一个短信平台，欢迎进群沟通
+![登录页](https://images.gitee.com/uploads/images/2021/1026/091849_da066287_1951833.png "屏幕截图.png")
+![客户信息](https://images.gitee.com/uploads/images/2021/1026/091925_aba98ab8_1951833.png "屏幕截图.png")
+![通道管理](https://images.gitee.com/uploads/images/2021/1026/091945_6fa9ab18_1951833.png "屏幕截图.png")
+![发送记录](https://images.gitee.com/uploads/images/2021/1026/092006_d3f89738_1951833.png "屏幕截图.png")
+
+
 ## 感谢
 项目是在 [SMSGate](https://github.com/Lihuanghe/SMSGate) 基础上开发的，感谢黄河大佬提供的开源项目
 
