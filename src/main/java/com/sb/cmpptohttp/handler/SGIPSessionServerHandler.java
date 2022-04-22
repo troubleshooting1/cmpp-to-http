@@ -1,6 +1,5 @@
 package com.sb.cmpptohttp.handler;
 
-
 import cn.hutool.core.convert.Convert;
 import cn.hutool.json.JSONUtil;
 import com.sb.cmpptohttp.domain.RedisKey;
@@ -25,16 +24,10 @@ import java.util.List;
 
 import static com.sb.cmpptohttp.domain.Constants.SMS_STAT_DELIVRD;
 
-/**
- * 联通SGIP 连接处理
- *
- * @author qiangchen
- */
 @Slf4j
 @ChannelHandler.Sharable
 @Component
-public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
-
+public class SGIPSessionServerHandler extends SessionConnectedHandler {
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -56,7 +49,7 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
      */
     private static Logger submitLogger = LoggerFactory.getLogger("chan.submit");
 
-    public SGIPSessionConnectedHandler() {
+    public SGIPSessionServerHandler() {
 
     }
 
@@ -82,7 +75,6 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
                     ctx.writeAndFlush(item_resp);
                 }
             }
-
             ctx.writeAndFlush(resp);
         } else if (msg instanceof SgipSubmitRequestMessage) {
             SgipSubmitRequestMessage submit = (SgipSubmitRequestMessage) msg;
@@ -111,7 +103,7 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
 
                 submitLogger.info(JSONUtil.toJsonStr(channelSubmitLog));
 
-                // mid和msgid对应关系
+                // mid和msgid对应关系，key:msgId, value:mid + "_" + feeCount + "_" + appId
                 redisTemplate.opsForValue().set(RedisKey.MSGID_MID_KEY_PREFIX + e.getSequenceNumber(),
                         messageDTO.getMid(), Duration.ofDays(4));
 
@@ -120,6 +112,7 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
             }
 
         } else if (msg instanceof SgipReportRequestMessage) {
+            log.info("返回的状态报告"+JSONUtil.toJsonStr(msg));
             SgipReportRequestMessage reportRequestMessage = (SgipReportRequestMessage) msg;
             log.info("SgipReportRequestMessage: {}", JSONUtil.toJsonStr(reportRequestMessage));
 
@@ -164,7 +157,6 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
              * 更新短信记录状态
              */
             updateSmsStatus(channelReportMessage);
-
         } else {
             ctx.fireChannelRead(msg);
         }
@@ -176,14 +168,15 @@ public class SGIPSessionConnectedHandler extends SessionConnectedHandler {
     private void updateSmsStatus(ChannelReportMessage channelReportMessage) {
         String msgId = channelReportMessage.getMsgId();
 
-        Object msgObject =
-                redisTemplate.opsForValue().get(RedisKey.MSGID_MID_KEY_PREFIX + msgId);
+        //RedisTemplate redisTemplateUpdate = new RedisTemplate();
+        //redisTemplateUpdate.afterPropertiesSet();
+        Object msgObject = redisTemplate.opsForValue().get(RedisKey.MSGID_MID_KEY_PREFIX + msgId);
         if (msgObject == null) {
             log.error("cannot find mid, msgid:{}", msgId);
             return;
         }
 
-        Long mid = Convert.toLong(msgObject.toString());
+        Long mid = Convert.toLong(msgObject);
         sendMsgService.updateMsgStatus(mid, channelReportMessage.getStatus(), channelReportMessage.getStatusCode());
     }
 }

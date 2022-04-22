@@ -5,10 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sb.cmpptohttp.domain.enums.ProtocolTypeEnum;
 import com.sb.cmpptohttp.entity.Channel;
-import com.sb.cmpptohttp.handler.CMPPSessionConnectedHandler;
-import com.sb.cmpptohttp.handler.SGIPSessionConnectedHandler;
-import com.sb.cmpptohttp.handler.SMGPSessionConnectedHandler;
-import com.sb.cmpptohttp.handler.SMPPSessionConnectedHandler;
+import com.sb.cmpptohttp.handler.*;
 import com.sb.cmpptohttp.mapper.ChannelMapper;
 import com.zx.sms.connect.manager.EndpointEntity;
 import com.zx.sms.connect.manager.EndpointManager;
@@ -57,6 +54,9 @@ public class ChanStartUp {
 
     @Autowired
     private SGIPSessionConnectedHandler sgipSessionConnectedHandler;
+
+    @Autowired
+    private SGIPSessionServerHandler sgipSessionServerHandler;
 
     @Autowired
     private SMGPSessionConnectedHandler smgpSessionConnectedHandler;
@@ -186,7 +186,7 @@ public class ChanStartUp {
 
         List<BusinessHandlerInterface> serverHandlers = new ArrayList<BusinessHandlerInterface>();
 
-        serverHandlers.add(new SGIPSessionConnectedHandler());
+        serverHandlers.add(sgipSessionServerHandler);
         child.setBusinessHandlerSet(serverHandlers);
         return child;
     }
