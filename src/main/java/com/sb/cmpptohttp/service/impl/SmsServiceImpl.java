@@ -170,7 +170,7 @@ public class SmsServiceImpl implements SmsService {
 
             requestMessage.setUsernumber(mobile);
             requestMessage.setMsgContent(content);
-            requestMessage.setReportflag((short) 0);
+            requestMessage.setReportflag((short) 1);
             return requestMessage;
 
         } else if (chan.getProtocol().equals(ProtocolTypeEnum.SMGP.code)) {
